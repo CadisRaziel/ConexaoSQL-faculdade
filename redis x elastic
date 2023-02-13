@@ -1,0 +1,7 @@
+Redis e ElasticSearch -> deixa a requisição em cache
+
+tipo se voce chama a mesma requisição varias vezes ele guarda em cache
+pra nao fica fazendo chamada no banco toda hora
+
+redis -> caro deixa em cache a memoria
+ElasticSearch -> simula um cache na memoria
