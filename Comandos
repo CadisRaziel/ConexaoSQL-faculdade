@@ -1,0 +1,90 @@
+//----------------------------
+CREATE TABLE jogador (
+    id_jogador NUMBER(10,0) NOT NULL,
+    nome VARCHAR2(100) NOT NULL,
+    posicao VARCHAR2(100) NOT NULL,
+    bi VARCHAR2(100),
+    CONSTRAINT pk_jogador PRIMARY KEY (id_jogador);
+);
+
+CONSTRAINT -> cria regras
+VARCHAR2 -> como se fosse 'text'
+//----------------------------
+
+
+//----------------------------------------
+CREATE TABLE contratado (
+    id_jogador NUMBER(10,0) NOT NULL
+    data_inicio DATE NOT NULL,
+    data_fim DATE NOT NULL,
+    CONSTRAINT pk_contratado PRIMARY KEY(id_jogador, data_inicio)
+    CONSTRAINT fk_contratado_ref_jogador FOREIGN KEY (id_jogador)
+      REFERENCES jogador(id_jogador),
+    CONSTRAINT ck_contratado CHECK (data_fim > data_inicio)
+); 
+
+CONSTRAINT pk_contratado PRIMARY KEY(id_jogador, data_inicio) -> chave composta com 2 atributos
+com isso criamos uma regra: eu nao posso ter o mesmo jogador contratado com o mesmo inicio
+
+CONSTRAINT fk_contratado_ref_jogador FOREIGN KEY (id_jogador) REFERENCES jogador(id_jogador) -> criamos a chave estranjeira, repare que o id_jogador precisa ser igual nas duas tabelas!!
+
+CONSTRAINT ck_contratado CHECK (data_fim > data_inicio) -> CHECK cria uma validação, aqui se eu tenta inseri uma data fim maior que a data inicio, essa regra barra a gravação no banco
+//----------------------------
+
+
+//----------------------------
+ALTER TABLE jogador RENAME TO jogadores; -> altera o nome da tabela
+//----------------------------
+
+
+//----------------------------
+ALTER TABLE jogador ADD apelido VARCHAR2(30); -> para inserir um novo atributo em uma tabela ja existente
+//----------------------------
+
+
+//----------------------------
+ALTER TABLE jogador RENAME COLUMN apelido TO nickname; -> altera o nome de uma coluna ja existente
+//----------------------------
+
+
+//----------------------------
+DESC jogador; -> mostra a estrutura da tabela (da uma visão sobre ela)
+//----------------------------
+
+
+//----------------------------
+ALTER TABLE jogador MODIFY posicao NUMBER(5,0); -> para alterar um tipo de um atributo ja existente
+//----------------------------
+
+
+//----------------------------
+ALTER TABLE jogador DROP COLUMN bi CASCADE CONSTRAINT; -> exclui um atributo de uma tabela, porém repare no 'cascade', ele vai excluir todas as regras referente a esse atributo tambem.
+//----------------------------
+
+
+//----------------------------
+DROP TABLE jogador; -> excluir uma tabela completa (TOMAR MUITO CUIDADO)
+//----------------------------
+
+//----------------------------
+ALTER TABLE contratado
+DROP CONSTRAINT fk_contratado_ref_jogador; -> caso eu queira excluir a tabela jogador, antes eu preciso remover o relacionamento da tabela contratado com ela, então esse comando fará isso
+//----------------------------
+
+
+//----------------------------
+ALTER TABLE contratado
+ADD CONSTRAINT fk_contratado_ref_jogador FOREIGN KEY (id_jogador) REFERENCES jogador(id_jogador), -> caso eu apaguei ou quero inseri uma nova foreign key eu posso utilizar esse comando
+//----------------------------
+
+
+//----------------------------
+ALTER TABLE contratado
+DISABLE CONSTRAINT fk_contratado_ref_jogador; -> para desabilitar uma foreign key, a regra existe mais ela vai fica desabilitada
+//----------------------------
+
+
+//----------------------------
+ALTER TABLE contratado
+ENABLE CONSTRAINT fk_contratado_ref_jogador; -> para habilitar novamente a foreign key
+//----------------------------
